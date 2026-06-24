@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload a Textbook — BookShelf</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#9776;</span>
+        BookShelf
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Browse</a>
+        <a href="upload.html" class="active">Upload</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- UPLOAD HERO -->
+  <section class="hero hero--short">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Contribute to the Library</p>
+      <h1 class="hero-title">Share a Textbook</h1>
+      <p class="hero-sub">Add a book to the collection. Fill in the details below and select a category so others can find it easily.</p>
+    </div>
+  </section>
+
+  <!-- UPLOAD FORM -->
+  <main class="form-section">
+    <div class="form-card">
+
+      <div class="form-group">
+        <label for="bookTitle">Book Title <span class="req">*</span></label>
+        <input type="text" id="bookTitle" class="form-input" placeholder="e.g. Introduction to Calculus" />
+      </div>
+
+      <div class="form-group">
+        <label for="bookAuthor">Author(s) <span class="req">*</span></label>
+        <input type="text" id="bookAuthor" class="form-input" placeholder="e.g. Thomas L. Floyd" />
+      </div>
+
+      <div class="form-group">
+        <label for="bookCategory">Category <span class="req">*</span></label>
+        <select id="bookCategory" class="form-input form-select">
+          <option value="">— Select a category —</option>
+          <option value="science">Science &amp; Math</option>
+          <option value="arts">Arts &amp; Humanities</option>
+          <option value="tech">Technology &amp; Engineering</option>
+          <option value="business">Business &amp; Economics</option>
+          <option value="medicine">Medicine &amp; Health</option>
+          <option value="law">Law &amp; Social Studies</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="bookDesc">Short Description</label>
+        <textarea id="bookDesc" class="form-input form-textarea" rows="3" placeholder="A brief summary of what this book covers…"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Book File (PDF) <span class="req">*</span></label>
+        <div class="drop-zone" id="dropZone">
+          <span class="drop-icon">📄</span>
+          <p class="drop-text">Drag &amp; drop your PDF here<br><span>or click to browse files</span></p>
+          <input type="file" id="fileInput" accept=".pdf" style="display:none" onchange="handleFileSelect(this)" />
+        </div>
+        <p class="file-name" id="fileName"></p>
+      </div>
+
+      <div class="form-group">
+        <label>Cover Image <span class="optional">(optional)</span></label>
+        <div class="drop-zone drop-zone--small" id="coverZone">
+          <span class="drop-icon">🖼️</span>
+          <p class="drop-text">JPG or PNG<br><span>or click to browse</span></p>
+          <input type="file" id="coverInput" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleCoverSelect(this)" />
+        </div>
+        <p class="file-name" id="coverName"></p>
+      </div>
+
+      <!-- PROGRESS BAR (hidden by default) -->
+      <div class="progress-wrap" id="progressWrap" style="display:none">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <!-- SUCCESS MESSAGE (hidden) -->
+      <div class="success-msg" id="successMsg" style="display:none">
+        ✅ Book uploaded successfully! <a href="index.html">Back to library →</a>
+      </div>
+
+      <!-- ERROR MESSAGE (hidden) -->
+      <div class="error-msg" id="errorMsg" style="display:none"></div>
+
+      <div class="form-actions">
+        <a href="index.html" class="btn-secondary">Cancel</a>
+        <button class="btn-primary" onclick="handleUpload()">Upload Book</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="logo">BookShelf</span>
+      <p>An open platform for sharing academic knowledge freely.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="upload.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BookShelf — Academic Textbook Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">&#9679; BookShelf</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#browse">Browse</a></li>
+        <li><a href="#upload-section">Upload</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+      <button class="nav-upload-btn" onclick="openModal('uploadModal')">+ Upload Book</button>
+      <button class="hamburger" id="hamburger" onclick="toggleNav()">&#9776;</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Free Academic Resources</p>
+      <h1 class="hero-title">Find Your Next<br/><em>Textbook</em></h1>
+      <p class="hero-sub">Browse, upload, and download academic textbooks across all disciplines — completely free, no account needed.</p>
+      <div class="search-wrap">
+        <div class="search-book-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by title, author, or keyword…" autocomplete="off" onkeyup="if(event.key==='Enter')handleSearch()"/>
+        <button class="search-btn" onclick="handleSearch()">Search</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">248</span><span class="stat-label">Textbooks</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">6</span><span class="stat-label">Categories</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always</span></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="book-stack">
+        <div class="stacked-book b1"></div>
+        <div class="stacked-book b2"></div>
+        <div class="stacked-book b3"></div>
+        <div class="stacked-book b4"></div>
+        <div class="stacked-book b5"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY PILLS -->
+  <section class="categories-bar" id="browse">
+    <div class="container">
+      <p class="section-eyebrow">Browse by Category</p>
+      <div class="category-pills" id="categoryPills">
+        <button class="pill active" data-cat="all">All Books</button>
+        <button class="pill" data-cat="science">🔬 Science &amp; Math</button>
+        <button class="pill" data-cat="arts">🎭 Arts &amp; Humanities</button>
+        <button class="pill" data-cat="tech">💻 Technology &amp; Engineering</button>
+        <button class="pill" data-cat="business">📈 Business &amp; Economics</button>
+        <button class="pill" data-cat="medicine">🩺 Medicine &amp; Health</button>
+        <button class="pill" data-cat="law">⚖️ Law &amp; Social Studies</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-layout container">
+    <aside class="sidebar">
+      <h3 class="sidebar-title">Filters</h3>
+      <div class="filter-group">
+        <label class="filter-label">Sort By</label>
+        <select class="filter-select" id="sortSelect" onchange="applyFilters()">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="az">Title A–Z</option>
+          <option value="za">Title Z–A</option>
+          <option value="popular">Most Downloaded</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">File Type</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" value="PDF" checked onchange="applyFilters()"/> PDF</label>
+          <label class="checkbox-item"><input type="checkbox" value="EPUB" checked onchange="applyFilters()"/> EPUB</label>
+          <label class="checkbox-item"><input type="checkbox" value="DOCX" checked onchange="applyFilters()"/> DOCX</label>
+        </div>
+      </div>
+      <button class="clear-filters-btn" onclick="clearFilters()">Clear Filters</button>
+      <div class="sidebar-upload-cta">
+        <p>Have a textbook to share?</p>
+        <button class="upload-cta-btn" onclick="openModal('uploadModal')">+ Upload Now</button>
+      </div>
+    </aside>
+
+    <div class="books-section">
+      <div class="books-header">
+        <p class="results-count" id="resultsCount"></p>
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grid view">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="7" height="7"/><rect x="9" y="0" width="7" height="7"/><rect x="0" y="9" width="7" height="7"/><rect x="9" y="9" width="7" height="7"/></svg>
+          </button>
+          <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="List view">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="1" width="16" height="3"/><rect x="0" y="6" width="16" height="3"/><rect x="0" y="11" width="16" height="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="book-grid" id="bookGrid"></div>
+      <div class="no-results hidden" id="noResults">
+        <div style="font-size:3rem;">📚</div>
+        <h3>No books found</h3>
+        <p>Try adjusting your filters or <button class="link-btn" onclick="clearFilters()">clear all filters</button></p>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </main>
+
+  <!-- UPLOAD MODAL -->
+  <div class="modal-overlay hidden" id="uploadModal" onclick="closeModalOutside(event,'uploadModal')">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Upload a Textbook</h2>
+        <button class="modal-close" onclick="closeModal('uploadModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Book Title <span class="required">*</span></label>
+          <input type="text" id="uploadTitle" class="form-input" placeholder="e.g. Calculus: Early Transcendentals"/>
+        </div>
+        <div class="form-group">
+          <label>Author(s) <span class="required">*</span></label>
+          <input type="text" id="uploadAuthor" class="form-input" placeholder="e.g. James Stewart"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category <span class="required">*</span></label>
+            <select id="uploadCategory" class="form-input">
+              <option value="">Select category…</option>
+              <option value="science">🔬 Science &amp; Math</option>
+              <option value="arts">🎭 Arts &amp; Humanities</option>
+              <option value="tech">💻 Technology &amp; Engineering</option>
+              <option value="business">📈 Business &amp; Economics</option>
+              <option value="medicine">🩺 Medicine &amp; Health</option>
+              <option value="law">⚖️ Law &amp; Social Studies</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Edition / Year</label>
+            <input type="text" id="uploadEdition" class="form-input" placeholder="e.g. 8th Ed, 2022"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="uploadDesc" class="form-input form-textarea" placeholder="Brief description of the textbook…" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Upload File <span class="required">*</span></label>
+          <div class="file-drop-zone" id="fileDropZone" onclick="document.getElementById('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+            <div class="file-drop-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <p class="file-drop-text">Drag &amp; drop your file here, or <span class="file-browse-link">browse</span></p>
+            <p class="file-drop-hint">PDF, EPUB, DOCX — Max 50MB</p>
+            <p class="file-selected" id="fileSelected"></p>
+          </div>
+          <input type="file" id="fileInput" accept=".pdf,.epub,.docx" style="display:none" onchange="fileChosen(event)"/>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="closeModal('uploadModal')">Cancel</button>
+          <button class="btn-primary" onclick="submitUpload()">Upload Book</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-overlay hidden" id="detailModal" onclick="closeModalOutside(event,'detailModal')">
+    <div class="modal modal-detail">
+      <div class="modal-header">
+        <h2 id="detailTitle"></h2>
+        <button class="modal-close" onclick="closeModal('detailModal')">&times;</button>
+      </div>
+      <div class="modal-body detail-body">
+        <div class="detail-cover" id="detailCover"></div>
+        <div class="detail-info">
+          <p class="detail-author" id="detailAuthor"></p>
+          <span class="detail-badge" id="detailCat"></span>
+          <p class="detail-meta" id="detailMeta"></p>
+          <p class="detail-desc" id="detailDesc"></p>
+          <div class="detail-actions">
+            <button class="btn-primary download-btn" id="detailDownloadBtn">⬇ Download</button>
+            <button class="btn-secondary" onclick="closeModal('detailModal')">Close</button>
+          </div>
+          <p class="detail-downloads" id="detailDownloads"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+    <div class="container about-grid">
+      <div>
+        <p class="section-eyebrow">About BookShelf</p>
+        <h2 class="section-title">Open knowledge,<br/>for everyone.</h2>
+        <p class="about-text">BookShelf is a free, open academic library where students, educators, and lifelong learners can share and access textbooks without barriers. No registration, no fees — just knowledge.</p>
+      </div>
+      <div class="about-features">
+        <div class="feature-item"><span class="feature-icon">📤</span><div><h4>Upload Freely</h4><p>Share any textbook in PDF, EPUB, or DOCX.</p></div></div>
+        <div class="feature-item"><span class="feature-icon">📥</span><div><h4>Download Instantly</h4><p>One-click downloads, no account needed.</p></div></div>
+        <div class="feature-item"><span class="feature-icon">🗂️</span><div><h4>Organized by Category</h4><p>Six major disciplines covered.</p></div></div>
+        <div class="feature-item"><span class="feature-icon">🔍</span><div><h4>Powerful Search</h4><p>Find books by title, author, or keyword.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo">&#9679; BookShelf</span>
+        <p>Free academic textbooks for everyone.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#">Browse</a>
+        <a href="#">Upload</a>
+        <a href="#">About</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2025 BookShelf. Open for all.</p></div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
